@@ -7,3 +7,16 @@
 @import "tailwindcss/utilities.css" layer(utilities);
 @import "./tokens.css";
 @config "./tailwind.preset.js";
+
+/*
+  Interaction states that work for real users and can also be forced in Storybook / Chromatic
+  with data-force-state="hover|press|focus" (pseudo-classes cannot be set from a story).
+  Disabled elements never react to hover or press.
+*/
+@custom-variant st-hover (&:where(:not(:disabled, [aria-disabled="true"]):hover, [data-force-state="hover"]));
+@custom-variant st-press (&:where(:not(:disabled, [aria-disabled="true"]):active, [data-force-state="press"]));
+@custom-variant st-focus (&:where(:focus-visible, [data-force-state="focus"]));
+
+/* Same states, styled on descendants of a `group` element (e.g. the title inside a card). */
+@custom-variant st-in-hover (:where(.group:not([aria-disabled="true"]):hover, .group[data-force-state="hover"]) &);
+@custom-variant st-in-press (:where(.group:not([aria-disabled="true"]):active, .group[data-force-state="press"]) &);
